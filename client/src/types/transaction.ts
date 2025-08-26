@@ -1,7 +1,12 @@
+export interface TransactionUser {
+   name: string
+   account: string
+}
+
 export interface Transaction {
   id: string
-  sender: string
-  receiver: string
+  sender: TransactionUser
+  receiver: TransactionUser
   amount: number
   currency: string
   cause: string

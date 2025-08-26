@@ -60,7 +60,7 @@ export default function Pagination({
 
 
   return (
-    <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+    <div className="flex flex-col space-y-4 md:flex-row items-center sm:justify-between sm:space-y-0 gap-2 sm:gap-4 md:gap-1">
       {/* Items per page selector */}
       <div className="flex items-center space-x-3">
         <div className="flex items-center space-x-2">
@@ -88,7 +88,7 @@ export default function Pagination({
           </SelectContent>
         </Select>
 
-        <span className="hidden md:block text-xs  xl:text-sm text-gray-600">transactions per page</span>
+        <span className="hidden md:block text-xs  xl:text-sm text-gray-600">views per page</span>
       </div>
 
       {/* Results info */}

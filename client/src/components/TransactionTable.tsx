@@ -14,20 +14,29 @@ interface TransactionTableProps {
 
 export default function TransactionTable({
   transactions,
-  currentUser = "surafelaraya",
+  currentUser = "Surafel Araya",
   isLoading = false,
 }: TransactionTableProps) {
+
   const getTransactionType = (transaction: Transaction) => {
-    // Top-up transactions (same sender and receiver) are incoming
-    if (transaction.sender === transaction.receiver) {
-      return "topup"
-    }
-    // If receiver is current user, it's incoming
-    if (transaction.receiver === currentUser || transaction.receiver_account_name === currentUser) {
-      return "incoming"
-    }
+  // Top-up transactions (same sender and receiver) are incoming
+  if (transaction.sender.name === transaction.receiver.name) {
+    return "topup"
+  }
+  
+  // If receiver is current user, it's incoming
+  if (transaction.receiver.name === currentUser) {
+    return "incoming"
+  }
+  
+  // If sender is current user, it's outgoing
+  if (transaction.sender.name === currentUser) {
     return "outgoing"
   }
+  
+  // Default to outgoing for other cases
+  return "outgoing"
+}
 
   const getTransactionIcon = (type: string) => {
     switch (type) {
@@ -61,12 +70,20 @@ export default function TransactionTable({
     return value.name || value.account || "Unknown"
   }
 
-  const formatTransactionDate = (dateString?: string) => {
-   if(!dateString) return "Unknown date"
-   const date = new Date(dateString)
-   if(!isValid(date)) return "Invalid date"
-   return formatDistanceToNow(date, { addSuffix: true })
+const formatTransactionDate = (timestamp?: number) => {
+  if (!timestamp) return "Unknown date";
+  
+  try {
+    // Convert Unix timestamp to Date object
+    const date = new Date(timestamp * 1000);
+    if (!isValid(date)) return "Invalid date";
+    
+    return formatDistanceToNow(date, { addSuffix: true });
+  } catch (error) {
+    console.error("Error formatting date:", error);
+    return "Invalid date";
   }
+}
 
   if (isLoading) {
     return (
@@ -130,7 +147,7 @@ export default function TransactionTable({
                     <div className="flex items-center space-x-2 mb-1">
                       <p className="text-xs sm:text-sm font-medium text-gray-900 sm:truncate 2xl:text-base">ID: {transaction.id}</p>
                       <Badge variant="outline" className="text-xs">
-                        {type === "topup" ? "Top-up" : type === "incoming" ? "Incoming" : "Outgoing"}
+                        {type === "topup" ? "Incoming" : type === "incoming" ? "Incoming" : "Outgoing"}
                       </Badge>
                     </div>
 
@@ -160,7 +177,7 @@ export default function TransactionTable({
                     {transaction.amount} {transaction.currency}
                   </div>
                   <div className="text-xs text-gray-500">
-                    {formatTransactionDate(transaction.created_at)}
+                    {formatTransactionDate(transaction.created_at_time)}
                   </div>
                 </div>
               </div>
