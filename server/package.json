@@ -1,12 +1,26 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "lockfileVersion": 3,
+  "requires": true,
+  "type": "module",
+  "packages": {
+    "": {
+      "name": "server",
+      "version": "1.0.0",
+      "license": "ISC"
+    }
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": ""
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.3.0",
+    "tsx": "^4.16.2",
+    "typescript": "^5.6.2"
+  },
+  "scripts": {
+    "build": "tsc -p .",
+    "dev": "tsx src/index.ts",
+    "start": "node dist/src/index.js"
+  }
 }
