@@ -33,7 +33,7 @@ if (!API_KEY || !API_SECRET) {
 /**
  * Helper: Sign a request according to YaYa Wallet spec
  */
-function signRequest(method: string, endpoint: string, body: any = null): Record<strin10g, string> {
+function signRequest(method: string, endpoint: string, body: any = null): Record<string, string> {
   const timestamp = Date.now().toString()
   const bodyStr = body && Object.keys(body).length > 0 ? JSON.stringify(body) : ""
   const prehash = `${timestamp}${method.toUpperCase()}${endpoint}${bodyStr}`
@@ -141,5 +141,5 @@ app.get("/health", (_req, res) => res.json({ ok: true, timestamp: new Date().toI
 
 app.listen(PORT, () => {
   console.log(`🚀 YaYa Wallet API Server listening on http://localhost:${PORT}`)
-  console.log(`📊 Dashboard available at ${process.env.CLIENT_URL || "http://localhost:3000"}`)
+  console.log(`📊 Dashboard available at ${process.env.CLIENT_URL || "http://localhost:51730"}`)
 })
