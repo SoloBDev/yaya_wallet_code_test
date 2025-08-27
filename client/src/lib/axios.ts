@@ -45,6 +45,8 @@ apiClient.interceptors.response.use(
       throw new Error(`API Error: ${error.response.status} - ${errorMessage}`)
     } else if (error.request) {
       // Request made but no response received
+      console.log("Network error:", error.request)
+      console.log("ENDPOINT:", process.env.REACT_APP_API_URL)
       console.error("Network error:", error.request)
       throw new Error("Network error: Unable to connect to the server")
     } else {
