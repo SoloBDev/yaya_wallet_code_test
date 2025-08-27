@@ -23,9 +23,9 @@ apiClient.interceptors.request.use(
     return config;
   },
   (error) => {
-    const baseURL = process.env.REACT_APP_API_URL;
+    const baseURL = import.meta.env.VITE_API_URL;
     if (!baseURL && process.env.NODE_ENV === "production") {
-      throw new Error("REACT_APP_API_URL is not defined in production");
+      throw new Error("VITE_API_URL is not defined in production");
     }
     console.error("Request error:", error);
     return Promise.reject(error);
@@ -67,7 +67,7 @@ apiClient.interceptors.response.use(
     } else if (error.request) {
       // Request made but no response received
       console.log("Network error:", error.request);
-      console.log("ENDPOINT:", process.env.REACT_APP_API_URL);
+      console.log("ENDPOINT:", import.meta.env.VITE_API_URL);
       console.error("Network error:", error.request);
       throw new Error("Network error: Unable to connect to the server");
     } else {
