@@ -29,7 +29,7 @@ function App() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const [itemsPerPage, setItemsPerPage] = useState(10);
-  const [currentUser, setCurrentUser] = useState("Surafel Araya");
+  const [currentUser, setCurrentUser] = useState("YaYa PII SC");
   const [isEditingUser, setIsEditingUser] = useState(false);
 
   const loadTransactions = async (page = 1, limit = itemsPerPage) => {

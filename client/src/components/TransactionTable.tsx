@@ -14,7 +14,7 @@ interface TransactionTableProps {
 
 export default function TransactionTable({
   transactions,
-  currentUser = "Surafel Araya",
+  currentUser = "YaYa PII SC",
   isLoading = false,
 }: TransactionTableProps) {
 
@@ -177,7 +177,7 @@ const formatTransactionDate = (timestamp?: number) => {
                     {transaction.amount} {transaction.currency}
                   </div>
                   <div className="text-xs text-gray-500">
-                    {formatTransactionDate(transaction.created_at_time)}
+                    {formatTransactionDate(Number(transaction.created_at))}
                   </div>
                 </div>
               </div>
