@@ -10,7 +10,7 @@ const app = express()
 
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "http://localhost:3000",
+    origin: process.env.CLIENT_URL || "http://localhost:5173",
     credentials: true,
   }),
 )
@@ -19,10 +19,10 @@ app.use(express.json())
 
 const PORT = process.env.PORT || 5000
 
-const BASE = process.env.YAYA_BASE_URL || "https://sandbox.yayawallet.com"
-const API_KEY = process.env.YAYA_API_KEY || "your_api_key_here"
-const API_SECRET = process.env.YAYA_API_SECRET || "your_api_secret_here"
-const DEFAULT_LIMIT = Number(process.env.DEFAULT_LIMIT || 10)
+const BASE = process.env.YAYA_BASE_URL || ""
+const API_KEY = process.env.YAYA_API_KEY || ""
+const API_SECRET = process.env.YAYA_API_SECRET || ""
+const DEFAULT_LIMIT = Number(process.env.DEFAULT_LIMIT || 5)
 const ALLOWED_LIMITS = [3, 5, 7, 10, 15, 20, 25, 50]
 
 if (!API_KEY || !API_SECRET) {
@@ -33,7 +33,7 @@ if (!API_KEY || !API_SECRET) {
 /**
  * Helper: Sign a request according to YaYa Wallet spec
  */
-function signRequest(method: string, endpoint: string, body: any = null): Record<string, string> {
+function signRequest(method: string, endpoint: string, body: any = null): Record<strin10g, string> {
   const timestamp = Date.now().toString()
   const bodyStr = body && Object.keys(body).length > 0 ? JSON.stringify(body) : ""
   const prehash = `${timestamp}${method.toUpperCase()}${endpoint}${bodyStr}`
