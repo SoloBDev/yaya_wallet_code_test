@@ -8,7 +8,7 @@ const API_ENDPOINTS = {
 
 export async function fetchTransactions(params: { page?: number; limit?: number } = {}): Promise<TransactionResponse> {
   try {
-    const { page = 1, limit = 10 } = params
+    const { page = 1, limit = 5 } = params
 
     const response = await apiClient.get<TransactionResponse>(API_ENDPOINTS.TRANSACTIONS, {
       params: { p: page, limit },
@@ -26,7 +26,7 @@ export async function searchTransactions(
   params: { page?: number; limit?: number } = {},
 ): Promise<TransactionResponse> {
   try {
-    const { page = 1, limit = 10 } = params
+    const { page = 1, limit = 5 } = params
 
     const response = await apiClient.post<TransactionResponse>(API_ENDPOINTS.SEARCH, {
       query,
