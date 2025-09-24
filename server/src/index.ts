@@ -1,24 +1,39 @@
-// server/index.ts
-
 import axios from "axios";
 import express from "express";
 import crypto from "crypto";
 import cors from "cors";
+import helmet from "helmet";
+import rateLimit from "express-rate-limit";
+import Joi from "joi";
 import "dotenv/config";
 
 const app = express();
 
+// --- Security headers ---
+app.use(helmet());
+
+// --- CORS ---
 app.use(
   cors({
     origin: [
-      'https://yaya-wallet-code-test.vercel.app',
-      'http://localhost:5173',
+      "https://yaya-wallet-code-test.vercel.app",
+      "http://localhost:5173",
     ],
     credentials: true,
   })
 );
 
 app.use(express.json());
+
+// --- Rate limiting (global) ---
+const globalLimiter = rateLimit({
+  windowMs: 20 * 1000,
+  max: 10, 
+  message: { error: "Too many requests, try again later." },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+app.use(globalLimiter);
 
 const PORT = process.env.PORT || 5000;
 
@@ -35,9 +50,7 @@ if (!API_KEY || !API_SECRET) {
   process.exit(1);
 }
 
-/**
- * Helper: Sign a request according to YaYa Wallet spec
- */
+// --- Request signing ---
 function signRequest(
   method: string,
   endpoint: string,
@@ -58,17 +71,25 @@ function signRequest(
   };
 }
 
-/**
- * GET /api/transactions?p=1&limit=10
- * Fetch transactions and apply server-side pagination
- */
+// --- Validation schemas ---
+const paginationSchema = Joi.object({
+  p: Joi.number().integer().min(1).default(1),
+  limit: Joi.number().valid(...ALLOWED_LIMITS).default(DEFAULT_LIMIT),
+});
+
+const searchSchema = Joi.object({
+  query: Joi.string().min(1).max(100).required(),
+  p: Joi.number().integer().min(1).default(1),
+  limit: Joi.number().valid(...ALLOWED_LIMITS).default(DEFAULT_LIMIT),
+});
+
+// --- Transactions with pagination ---
 app.get("/api/transactions", async (req, res) => {
   try {
-    const p = Number(req.query.p) || 1;
-    const requestedLimit = Number(req.query.limit) || DEFAULT_LIMIT;
-    const limit = ALLOWED_LIMITS.includes(requestedLimit)
-      ? requestedLimit
-      : DEFAULT_LIMIT;
+    const { value, error } = paginationSchema.validate(req.query);
+    if (error) return res.status(400).json({ error: error.message });
+
+    const { p, limit } = value;
 
     const endpointForSignature = `/api/en/transaction/find-by-user`;
     const headers = signRequest("GET", endpointForSignature);
@@ -79,7 +100,6 @@ app.get("/api/transactions", async (req, res) => {
     );
     const allTransactions = data.data || [];
 
-    // Server-side pagination
     const startIndex = (p - 1) * limit;
     const endIndex = startIndex + limit;
     const paginatedData = allTransactions.slice(startIndex, endIndex);
@@ -105,21 +125,13 @@ app.get("/api/transactions", async (req, res) => {
   }
 });
 
-/**
- * POST /api/transactions/search
- * Body: { query: string, p?: number, limit?: number }
- * Search by sender, receiver, ID, or cause and paginate results
- */
+// --- Search transactions ---
 app.post("/api/transactions/search", async (req, res) => {
   try {
-    const {
-      query = "",
-      p = 1,
-      limit: requestedLimit = DEFAULT_LIMIT,
-    } = req.body || {};
-    const limit = ALLOWED_LIMITS.includes(requestedLimit)
-      ? requestedLimit
-      : DEFAULT_LIMIT;
+    const { value, error } = searchSchema.validate(req.body);
+    if (error) return res.status(400).json({ error: error.message });
+
+    const { query, p, limit } = value;
 
     const endpointForSignature = `/api/en/transaction/search`;
     const requestBody = { query };
@@ -132,7 +144,6 @@ app.post("/api/transactions/search", async (req, res) => {
     );
     const transactions = data.data || [];
 
-    // Server-side pagination
     const startIndex = (p - 1) * limit;
     const endIndex = startIndex + limit;
     const paginatedData = transactions.slice(startIndex, endIndex);
@@ -159,9 +170,7 @@ app.post("/api/transactions/search", async (req, res) => {
   }
 });
 
-/**
- * Health check
- */
+// --- Health check ---
 app.get("/health", (_req, res) =>
   res.json({ ok: true, timestamp: new Date().toISOString() })
 );
@@ -169,10 +178,5 @@ app.get("/health", (_req, res) =>
 app.listen(PORT, () => {
   console.log(
     `🚀 YaYa Wallet API Server listening on http://localhost:${PORT}`
-  );
-  console.log(
-    `📊 Dashboard available at ${
-      process.env.CLIENT_URL || "http://localhost:51730"
-    }`
   );
 });
