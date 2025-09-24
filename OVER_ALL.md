@@ -15,12 +15,12 @@
 ## 🏗️ **Architecture Overview**
 
 ### **Why This Architecture?**
-\`\`\`
+```
 ┌─────────────────┐    HTTP/HTTPS    ┌─────────────────┐    HMAC-SHA256    ┌─────────────────┐
 │   React Client  │ ◄──────────────► │  Express Server │ ◄───────────────► │  YaYa Wallet    │
 │   (Frontend)    │                  │   (Backend)     │                   │     API         │
 └─────────────────┘                  └─────────────────┘                   └─────────────────┘
-\`\`\`
+```
 
 **Benefits:**
 - ✅ **Separation of Concerns**: Frontend handles UI, backend handles business logic
@@ -50,7 +50,7 @@ function signRequest(method: string, endpoint: string, body: any = null): Record
     "Content-Type": "application/json",
   }
 }
-\`\`\`
+```
 
 ### **Why HMAC-SHA256?**
 - 🛡️ **Tamper-Proof**: Any modification to the request invalidates the signature
@@ -86,7 +86,7 @@ apiClient.interceptors.response.use(
     // Handle other errors...
   }
 )
-\`\`\`
+```
 
 ### **Key Benefits:**
 - ✅ **Request/Response Interceptors**: Automatic error handling and logging
@@ -115,7 +115,7 @@ const handleSearch = useCallback((query: string) => {
 useEffect(() => {
   loadTransactions(1) // Auto-reload when search changes
 }, [searchQuery])
-\`\`\`
+```
 
 ### **Backend Search Endpoint:**
 \`\`\`typescript
@@ -137,7 +137,7 @@ app.post("/api/transactions/search", async (req, res) => {
     totalPages: Math.ceil(data.data.length / limit)
   })
 })
-\`\`\`
+```
 
 ### **Why This Approach?**
 - ⚡ **Real-Time**: Instant search as user types
@@ -167,7 +167,7 @@ app.get("/api/transactions", async (req, res) => {
     totalPages: Math.ceil(response.data.total / limit)
   })
 })
-\`\`\`
+```
 
 ### **Why Frontend Pagination for Search?**
 \`\`\`typescript
@@ -175,7 +175,7 @@ app.get("/api/transactions", async (req, res) => {
 const transactions = searchResponse.data || []
 const startIndex = (page - 1) * limit
 const paginatedData = transactions.slice(startIndex, startIndex + limit)
-\`\`\`
+```
 
 
 
@@ -190,13 +190,13 @@ const paginatedData = transactions.slice(startIndex, startIndex + limit)
 ## 🎨 **Frontend Architecture - Modern React Patterns**
 
 ### **Component Architecture:**
-\`\`\`
+```
 App.tsx
 ├── DashboardHeader.tsx (Stats cards)
 ├── SearchBar.tsx (Search functionality)
 ├── TransactionTable.tsx (Data display)
 └── Pagination.tsx (Navigation)
-\`\`\`
+```
 
 ---
 
@@ -211,7 +211,7 @@ YAYA_BASE_URL=https://sandbox.yayawallet.com
 
 # Client
 REACT_APP_API_URL=http://localhost:5000
-\`\`\`
+```
 
 ### **Security Measures:**
 - 🔐 **API Credentials**: Never exposed to frontend
@@ -233,7 +233,7 @@ const yayaApiClient = axios.create({
 
 // Allowed limits for security
 const ALLOWED_LIMITS = [3, 5, 7, 10, 15, 20, 25, 50]
-\`\`\`
+```
 
 ---
 
@@ -249,13 +249,13 @@ interface Transaction {
   sender: { name: string; account: string }
   receiver: { name: string; account: string }
 }
-\`\`\`
+```
 
 ### **2. Tailwind CSS Over Traditional CSS**
 **Why?** Utility-first, consistent design system, smaller bundle size
 \`\`\`tsx
 <Card className="bg-gradient-to-r from-blue-500 to-blue-600 text-white">
-\`\`\`
+```
 
 
 ---
