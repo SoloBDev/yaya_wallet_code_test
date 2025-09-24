@@ -177,14 +177,7 @@ const startIndex = (page - 1) * limit
 const paginatedData = transactions.slice(startIndex, startIndex + limit)
 \`\`\`
 
-### **Strategic Decision Matrix:**
 
-| Feature | Backend Pagination | Frontend Pagination | Our Choice |
-|---------|-------------------|-------------------|------------|
-| **Main List** | ✅ Memory efficient | ❌ Loads all data | **Backend** |
-| **Search Results** | ❌ Complex API calls | ✅ Instant navigation | **Frontend** |
-| **Performance** | ✅ Fast initial load | ❌ Slower with large datasets | **Backend** |
-| **User Experience** | ❌ Network delay on page change | ✅ Instant page switching | **Mixed** |
 
 ### **Benefits of Our Hybrid Approach:**
 - 🚀 **Performance**: Backend pagination for large datasets
@@ -195,31 +188,6 @@ const paginatedData = transactions.slice(startIndex, startIndex + limit)
 ---
 
 ## 🎨 **Frontend Architecture - Modern React Patterns**
-
-### **Custom Hooks for State Management:**
-\`\`\`typescript
-// useTransactions.ts - Centralized transaction logic
-export function useTransactions() {
-  const [transactions, setTransactions] = useState<Transaction[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  
-  const loadTransactions = useCallback(async (page = 1) => {
-    // API logic here
-  }, [searchQuery, itemsPerPage])
-  
-  return {
-    transactions, loading, error,
-    handleSearch, handlePageChange, refreshTransactions
-  }
-}
-\`\`\`
-
-### **Why Custom Hooks?**
-- 🔄 **Reusability**: Logic can be shared across components
-- 🧪 **Testability**: Easier to unit test business logic
-- 📦 **Separation**: UI components focus on presentation
-- 🎯 **Performance**: Optimized re-renders with useCallback
 
 ### **Component Architecture:**
 \`\`\`
@@ -249,28 +217,11 @@ REACT_APP_API_URL=http://localhost:5000
 - 🔐 **API Credentials**: Never exposed to frontend
 - 🛡️ **CORS Protection**: Configured for specific origins
 - ⏰ **Request Signing**: HMAC prevents tampering
-- 🚫 **Input Validation**: Sanitized user inputs
 - 📊 **Rate Limiting**: Controlled API usage
 
 ---
 
 ## 📊 **Performance Optimizations**
-
-### **Frontend Optimizations:**
-\`\`\`typescript
-// Debounced search to prevent excessive API calls
-const debouncedSearch = useMemo(
-  () => debounce((query: string) => {
-    handleSearch(query)
-  }, 300),
-  [handleSearch]
-)
-
-// Memoized calculations
-const transactionStats = useMemo(() => {
-  return calculateStats(transactions)
-}, [transactions])
-\`\`\`
 
 ### **Backend Optimizations:**
 \`\`\`typescript
@@ -283,12 +234,6 @@ const yayaApiClient = axios.create({
 // Allowed limits for security
 const ALLOWED_LIMITS = [3, 5, 7, 10, 15, 20, 25, 50]
 \`\`\`
-
-### **Performance Metrics:**
-- ⚡ **Initial Load**: < 2 seconds
-- 🔍 **Search Response**: < 500ms
-- 📄 **Page Navigation**: < 300ms
-- 💾 **Memory Usage**: Optimized with pagination
 
 ---
 
@@ -312,20 +257,6 @@ interface Transaction {
 <Card className="bg-gradient-to-r from-blue-500 to-blue-600 text-white">
 \`\`\`
 
-### **3. Express.js Over Next.js API Routes**
-**Why?** Better separation, easier deployment, more control over middleware
-\`\`\`typescript
-app.use(cors({ origin: process.env.CLIENT_URL }))
-app.use(express.json())
-\`\`\`
-
-### **4. Custom Pagination Over Library**
-**Why?** Full control, specific requirements, better performance
-\`\`\`typescript
-const { visiblePages, hasMultiplePages } = usePagination({
-  currentPage, totalPages, delta: 2
-})
-\`\`\`
 
 ---
 
@@ -339,13 +270,6 @@ YAYA_BASE_URL=https://yayawallet.com
 CLIENT_URL=https://your-app.vercel.app
 \`\`\`
 
-### **Production Features:**
-- 🐳 **Docker Support**: Containerized deployment
-- 🔍 **Health Checks**: `/health` endpoint for monitoring
-- 📊 **Logging**: Structured logging for debugging
-- 🛡️ **Error Handling**: Graceful error recovery
-- 📈 **Monitoring**: Performance metrics tracking
-
 ---
 
 ## 💡 **Innovation & Best Practices**
@@ -354,37 +278,23 @@ CLIENT_URL=https://your-app.vercel.app
 - ✅ **ESLint + Prettier**: Consistent code formatting
 - ✅ **TypeScript Strict Mode**: Maximum type safety
 - ✅ **Error Boundaries**: Graceful error handling
-- ✅ **Loading States**: Better user experience
 
 ### **User Experience:**
 - 📱 **Responsive Design**: Works on all devices
 - ⚡ **Real-time Updates**: Instant feedback
 - 🎨 **Modern UI**: Clean, professional interface
-- ♿ **Accessibility**: Screen reader support
 
 ### **Developer Experience:**
 - 🔧 **Hot Reload**: Fast development cycle
 - 📚 **Documentation**: Comprehensive README
-- 🧪 **Testing Strategy**: Unit and integration tests
+- 🧪 **Testing Strategy**: Unit, A/B and integration tests
 - 🐛 **Debug Tools**: Development-only debug panel
 
 ---
 
 ## 🎤 **Presentation Tips**
 
-### **Demo Flow:**
-1. **Show Architecture Diagram** (2 minutes)
-2. **Live Demo** - Search, pagination, responsive design (3 minutes)
-3. **Code Walkthrough** - HMAC signing, API integration (4 minutes)
-4. **Technical Decisions** - Why this approach? (3 minutes)
-5. **Q&A** - Be ready for technical questions (3 minutes)
 
-### **Key Talking Points:**
-- 🔐 **Security First**: HMAC signing prevents API abuse
-- ⚡ **Performance**: Smart pagination strategy
-- 🎯 **User Experience**: Real-time search and responsive design
-- 🏗️ **Scalability**: Modular architecture for future growth
-- 🛡️ **Production Ready**: Error handling, monitoring, deployment
 
 ### **Potential Questions & Answers:**
 **Q: Why not use Next.js for everything?**
@@ -392,10 +302,6 @@ CLIENT_URL=https://your-app.vercel.app
 
 **Q: How do you handle API rate limiting?**
 **A:** Implemented allowed limits array, request timeouts, and retry logic with exponential backoff.
-
-**Q: What about real-time updates?**
-**A:** Current implementation uses polling. For real-time, we could add WebSocket support or Server-Sent Events.
-
 ---
 
 ## 🏆 **Project Achievements**
@@ -407,13 +313,7 @@ CLIENT_URL=https://your-app.vercel.app
 - ✅ **Performance Optimized** with smart pagination
 - ✅ **Production Ready** with proper error handling
 
-### **Business Value:**
-- 💰 **Cost Effective**: Efficient API usage with pagination
-- 🚀 **Scalable**: Architecture supports growth
-- 👥 **User Friendly**: Intuitive interface for transaction management
-- 🔒 **Secure**: Enterprise-grade security implementation
-- 📈 **Maintainable**: Clean code with proper documentation
 
 ---
 
-**Remember: Focus on the "why" behind each technical decision. Show how each choice solves a specific problem and adds value to the project.**
+Thank you !
