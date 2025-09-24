@@ -33,7 +33,7 @@
 ## 🔐 **HMAC-SHA256 Request Signing - The Security Foundation**
 
 ### **What is HMAC-SHA256?**
-\`\`\`typescript
+```typescript
 function signRequest(method: string, endpoint: string, body: any = null): Record<string, string> {
   const timestamp = Date.now().toString()
   const bodyStr = body && Object.keys(body).length > 0 ? JSON.stringify(body) : ""
@@ -69,7 +69,7 @@ function signRequest(method: string, endpoint: string, body: any = null): Record
 ## 🌐 **Axios Implementation - Smart HTTP Client**
 
 ### **Why Axios Over Fetch?**
-\`\`\`typescript
+```typescript
 const apiClient = axios.create({
   baseURL: process.env.REACT_APP_API_URL || "http://localhost:5000",
   timeout: 10000,
@@ -105,7 +105,7 @@ apiClient.interceptors.response.use(
 ## 🔍 **Search Implementation - Real-Time & Efficient**
 
 ### **Frontend Search Logic:**
-\`\`\`typescript
+```typescript
 const handleSearch = useCallback((query: string) => {
   setSearchQuery(query)
   setCurrentPage(1) // Reset to first page
@@ -118,7 +118,7 @@ useEffect(() => {
 ```
 
 ### **Backend Search Endpoint:**
-\`\`\`typescript
+```typescript
 app.post("/api/transactions/search", async (req, res) => {
   const { query, p = 1, limit = 10 } = req.body
   
@@ -150,7 +150,7 @@ app.post("/api/transactions/search", async (req, res) => {
 ## 📄 **Pagination Strategy - Backend vs Frontend**
 
 ### **Why Backend Pagination for Main Data?**
-\`\`\`typescript
+```typescript
 // Backend handles pagination for main transaction list
 app.get("/api/transactions", async (req, res) => {
   const p = Number(req.query.p) || 1
@@ -170,7 +170,7 @@ app.get("/api/transactions", async (req, res) => {
 ```
 
 ### **Why Frontend Pagination for Search?**
-\`\`\`typescript
+```typescript
 // Search returns all results, we paginate client-side
 const transactions = searchResponse.data || []
 const startIndex = (page - 1) * limit
@@ -203,7 +203,7 @@ App.tsx
 ## 🛡️ **Security Implementation**
 
 ### **Environment Variables:**
-\`\`\`bash
+```bash
 # Server
 YAYA_API_KEY=key-test_xxxxx
 YAYA_API_SECRET=eyJhcGlfa2V5Ijoi...
@@ -224,7 +224,7 @@ REACT_APP_API_URL=http://localhost:5000
 ## 📊 **Performance Optimizations**
 
 ### **Backend Optimizations:**
-\`\`\`typescript
+```typescript
 // Request timeout to prevent hanging
 const yayaApiClient = axios.create({
   timeout: 15000,
@@ -241,7 +241,7 @@ const ALLOWED_LIMITS = [3, 5, 7, 10, 15, 20, 25, 50]
 
 ### **1. TypeScript Over JavaScript**
 **Why?** Type safety, better IDE support, fewer runtime errors
-\`\`\`typescript
+```typescript
 interface Transaction {
   id: string
   amount: number
@@ -253,7 +253,7 @@ interface Transaction {
 
 ### **2. Tailwind CSS Over Traditional CSS**
 **Why?** Utility-first, consistent design system, smaller bundle size
-\`\`\`tsx
+```tsx
 <Card className="bg-gradient-to-r from-blue-500 to-blue-600 text-white">
 ```
 
@@ -263,12 +263,12 @@ interface Transaction {
 ## 🚀 **Deployment & Production Readiness**
 
 ### **Environment Configuration:**
-\`\`\`bash
+```bash
 # Production Environment Variables
 NODE_ENV=production
 YAYA_BASE_URL=https://yayawallet.com
 CLIENT_URL=https://your-app.vercel.app
-\`\`\`
+```
 
 ---
 
